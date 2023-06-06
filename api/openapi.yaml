@@ -1,0 +1,163 @@
+openapi: 3.0.2
+info:
+  contact:
+    email: spilab.uex@gmail.com
+    name: Spilab
+    url: http://spilab.es/
+  description: This API provides us with different information about the users to
+    use in the shopping centre to provide a better experience in the visit
+  termsOfService: http://spilab.es/
+  title: Shopping Center
+  version: "1.0"
+servers:
+- url: /
+tags:
+- name: User
+paths:
+  /temperature:
+    get:
+      operationId: getTemperature
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Temperature'
+          description: Successful response
+        404:
+          content:
+            text/plain:
+              schema:
+                example: Not found
+                title: Endpoint not found
+                type: string
+          description: Not found response
+      summary: Gets the environment temperature
+      tags:
+      - User
+      x-dac:
+        operand: temperature
+        operator:
+          type: math
+          name: avg
+        conditions:
+          precision: 10
+          temporal: 1500
+      x-swagger-router-controller: User
+  /location:
+    get:
+      operationId: getLocation
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: Successful response
+        404:
+          content:
+            text/plain:
+              schema:
+                example: Not found
+                title: Endpoint not found
+                type: string
+          description: Not found response
+      summary: Gets the current location
+      tags:
+      - User
+      x-dac:
+        operand: location
+        operator:
+          type: specfic
+          name: heatmap
+        conditions:
+          precision: 10
+          temporal: 1800
+      x-swagger-router-controller: User
+  /music:
+    get:
+      operationId: getMusic
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MusicArray'
+          description: Successful response
+        404:
+          content:
+            text/plain:
+              schema:
+                example: Not found
+                title: Endpoint not found
+                type: string
+          description: Not found response
+      summary: Gets a list of favourite music genres
+      tags:
+      - User
+      x-dac:
+        operand: music
+        operator:
+          type: specfic
+          name: selectMusic
+        conditions:
+          precision: 10
+          temporal: 2000
+      x-swagger-router-controller: User
+components:
+  responses:
+    200Location:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Location'
+      description: Successful response
+    200Temperature:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Temperature'
+      description: Successful response
+    200Music:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MusicArray'
+      description: Successful response
+    404:
+      content:
+        text/plain:
+          schema:
+            example: Not found
+            title: Endpoint not found
+            type: string
+      description: Not found response
+  schemas:
+    Temperature:
+      example:
+        temperature: 38.48492
+      properties:
+        temperature:
+          example: 38.48492
+          format: double
+          type: number
+      type: object
+    Location:
+      example:
+        latitude: 38.48492
+        longitude: -6.58794
+      properties:
+        latitude:
+          example: 38.48492
+          format: double
+          type: number
+        longitude:
+          example: -6.58794
+          format: double
+          type: number
+      type: object
+    MusicArray:
+      items:
+        example: '[pop,rock,indie]'
+        type: string
+      type: array

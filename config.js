@@ -9,7 +9,7 @@ const config = {
 
   MQTT:{
     PROTOCOL: 'mqtt',
-    HOST: '',
+    HOST: 'broker.hivemq.com',
     PORT: '1883',
     options:{
       username:'',

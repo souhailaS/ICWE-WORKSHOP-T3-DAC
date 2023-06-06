@@ -1,5 +1,5 @@
 'use strict';
-
+var locationmanager=require('./locationmanager')
 
 
 exports.avg = function (result){
@@ -21,13 +21,36 @@ exports.avg = function (result){
 
 }
 
-exports.selectMusic = function (json){
- //TODO
+exports.selectMusic = function (result){
+    var reqMap = new Map();
+
+    console.log(result)
+    result.forEach(musicList => {
+        musicList.forEach(genre =>{
+
+            if(reqMap.get(genre) == null)
+                reqMap.set(genre, { frequency: 1});
+            else{
+                reqMap.set(genre, { frequency: reqMap.get(genre).frequency+1});
+            }
+        });
+        
+    });
+    
+    let jsonObject = {};  
+    reqMap.forEach((value, key) => {  
+        jsonObject[key] = value  
+    });  
+    console.log(JSON.stringify(jsonObject)) 
+    
+    
+    return jsonObject;
 
 }
 
-exports.heatmap = function (json){
-    //TODO
+exports.heatmap = function (result){
+    result=locationmanager.convertLocations(result)
+    result=locationmanager.buildHeatMap(result)
 
-
+    return result
 }
